@@ -6,6 +6,7 @@ export default function Accounts({ user, setUser }) {
   const [email, setEmail] = useState(user?.email || '')
   const [transactions, setTransactions] = useState([])
   const [savingsPercentage, setSavingsPercentage] = useState(0)
+  const [profilePhoto, setProfilePhoto] = useState(null)
 
   useEffect(() => {
     loadTransactions()
@@ -40,16 +41,54 @@ export default function Accounts({ user, setUser }) {
     }
   }
 
+  const handlePhotoUpload = () => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/*'
+    input.onchange = (e) => {
+      const file = e.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          setProfilePhoto(e.target.result)
+        }
+        reader.readAsDataURL(file)
+        alert('Foto profil berhasil diubah!')
+      }
+    }
+    input.click()
+  }
+
   return (
     <div className="h-full flex flex-col">
       <div className="flex items-center gap-6 mb-6">
         <div className="relative">
-          <div className="w-20 h-20 bg-light-blue rounded-full flex items-center justify-center text-3xl text-white">
-            <i className="ri-user-line" />
+          <div className="w-20 h-20 bg-light-blue rounded-full flex items-center justify-center text-3xl text-white overflow-hidden">
+            {profilePhoto ? (
+              <img src={profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+            ) : (
+              <i className="ri-user-line" />
+            )}
           </div>
-          <div className="absolute -top-2 -right-2 w-8 h-8 bg-yellow rounded-full flex items-center justify-center text-lg">
-            🏆
-          </div>
+          {savingsPercentage >= 100 ? (
+            <div className="absolute -top-2 -right-2 w-8 h-8 bg-yellow rounded-full flex items-center justify-center text-lg">
+              🏆
+            </div>
+          ) : savingsPercentage >= 50 ? (
+            <div className="absolute -top-2 -right-2 w-8 h-8 bg-yellow rounded-full flex items-center justify-center text-lg">
+              🥇
+            </div>
+          ) : savingsPercentage > 0 ? (
+            <div className="absolute -top-2 -right-2 w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-lg">
+              🥈
+            </div>
+          ) : null}
+          <button 
+            onClick={handlePhotoUpload}
+            className="absolute -bottom-1 -right-1 w-8 h-8 bg-dark-blue rounded-full flex items-center justify-center text-white text-sm hover:bg-blue"
+          >
+            <i className="ri-camera-line" />
+          </button>
         </div>
         <div className="flex-grow">
           <h3 className="text-2xl font-bold text-dark-blue mb-2">{user?.name}</h3>
@@ -64,7 +103,7 @@ export default function Accounts({ user, setUser }) {
       </div>
 
       <div className="border-2 border-light-blue rounded-3xl flex-grow p-8">
-        <h4 className="text-lg font-semibold text-dark-blue mb-6">Biodata</h4>
+        <h4 className="text-lg font-semibold text-dark-blue mb-6">Pengaturan Profil</h4>
         <div className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Nama</label>
@@ -73,6 +112,7 @@ export default function Accounts({ user, setUser }) {
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full p-3 border-2 border-light-blue rounded-lg"
+              placeholder="Masukkan nama Anda"
             />
           </div>
           <div>
@@ -82,7 +122,18 @@ export default function Accounts({ user, setUser }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full p-3 border-2 border-light-blue rounded-lg"
+              placeholder="Masukkan email Anda"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Foto Profil</label>
+            <button 
+              onClick={handlePhotoUpload}
+              className="w-full p-3 border-2 border-dashed border-light-blue rounded-lg text-light-blue hover:bg-light-blue hover:text-white transition-colors"
+            >
+              <i className="ri-upload-line mr-2" />
+              Klik untuk mengubah foto profil
+            </button>
           </div>
         </div>
       </div>
@@ -92,7 +143,7 @@ export default function Accounts({ user, setUser }) {
           onClick={handleSave}
           className="px-8 py-3 bg-dark-blue text-white rounded-full font-semibold hover:bg-blue"
         >
-          Simpan
+          Simpan Perubahan
         </button>
       </div>
     </div>
