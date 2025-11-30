@@ -112,7 +112,7 @@ export default function SignIn() {
                   <input type="checkbox" className="w-5 h-5 rounded-full mr-2" />
                   <label>Remember me</label>
                 </div>
-                <a href="#" className="text-light-blue hover:underline">Forgot Password?</a>
+                <button onClick={() => navigate('/forgot-password')} className="text-light-blue hover:underline">Forgot Password?</button>
               </div>
             )}
 

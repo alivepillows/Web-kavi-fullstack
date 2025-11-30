@@ -9,6 +9,7 @@ export default function DashboardContent() {
   const [transactions, setTransactions] = useState([])
   const [categories, setCategories] = useState([])
   const [showModal, setShowModal] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [formData, setFormData] = useState({ amount: '', type: '', date: '', note: '' })
 
   useEffect(() => {
@@ -46,6 +47,7 @@ export default function DashboardContent() {
       })
       setShowModal(false)
       setFormData({ amount: '', type: '', date: '', note: '' })
+      setShowSuccessModal(true)
       loadTransactions()
     } catch (error) { 
       alert('Gagal menambah transaksi: ' + (error.response?.data?.error || error.message));
@@ -297,6 +299,22 @@ export default function DashboardContent() {
                 className="w-full p-3 border-2 border-light-blue rounded-lg"
               />
             </div>
+          </div>
+        </div>
+      )}
+
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowSuccessModal(false)}>
+          <div className="bg-white p-8 rounded-3xl shadow-lg w-full max-w-sm text-center border-2 border-light-blue" onClick={(e) => e.stopPropagation()}>
+            <div className="text-6xl mb-4">😊</div>
+            <h3 className="text-xl font-semibold text-dark-blue mb-2">Transaksi berhasil</h3>
+            <p className="text-gray-600 mb-6">ditambahkan</p>
+            <button 
+              onClick={() => setShowSuccessModal(false)}
+              className="px-8 py-3 bg-dark-blue text-white rounded-full font-semibold hover:bg-blue"
+            >
+              Kembali
+            </button>
           </div>
         </div>
       )}

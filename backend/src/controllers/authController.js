@@ -26,3 +26,21 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: 'Login failed' }); 
   }
 };
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await prisma.user.update({ 
+      where: { email }, 
+      data: { password: hashedPassword } 
+    });
+    res.json({ message: 'Password updated successfully' });
+  } catch (error) { 
+    res.status(500).json({ error: 'Password reset failed' }); 
+  }
+};
