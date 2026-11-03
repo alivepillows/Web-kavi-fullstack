@@ -99,7 +99,7 @@ Frontend akan berjalan di `http://localhost:3000`
 
 ## Tampilan
 
-Tampilan UI tetap sama dengan versi HTML/CSS/JS original, menggunakan Tailwind CSS dengan warna custom:
+Tampilan menggunakan Tailwind CSS dengan warna custom:
 - Dark Blue: #113F67
 - Blue: #34699A
 - Light Blue: #58A0C8
